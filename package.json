@@ -1,0 +1,43 @@
+{
+	"name": "dm-langserver-demo",
+	"version": "0.1.0",
+	"displayName": "DMLS Online Demo",
+	"description": "Demo ",
+	"publisher": "platymuus",
+	"author": "SpaceManiac",
+	"license": "GPL-3.0",
+	"keywords": [
+		"byond",
+		"dream maker",
+		"dm",
+		"ss13"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SpaceManiac/SpacemanDMM/"
+	},
+	"categories": [
+		"Programming Languages",
+		"Other"
+	],
+	"main": "./dist/main",
+	"scripts": {
+		"compile": "webpack --mode none",
+		"watch": "webpack --mode none --watch",
+		"test-compile": "tsc -p ./"
+	},
+	"dependencies": {
+		"monaco-editor": "^0.16.2"
+	},
+	"devDependencies": {
+		"@types/node": "^7.10.3",
+		"@types/webpack": "^4.4.25",
+		"css-loader": "^2.1.1",
+		"style-loader": "^0.23.1",
+		"ts-loader": "^5.3.3",
+		"tslint": "^5.12.1",
+		"typescript": "^3.4.1",
+		"webpack": "^4.29.6",
+		"webpack-cli": "^3.3.0"
+	}
+}
