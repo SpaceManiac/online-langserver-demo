@@ -20,7 +20,9 @@ const config = {
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: path.resolve(__dirname, 'dist'),
+    publicPath: 'dist/',
     filename: '[name].bundle.js',
+    chunkFilename: '[id].chunk.js',
     globalObject: 'self',
     //libraryTarget: 'commonjs2',
     //devtoolModuleFilenameTemplate: '../[resource-path]'
