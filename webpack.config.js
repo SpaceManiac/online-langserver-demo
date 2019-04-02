@@ -11,11 +11,7 @@ const config = {
   // the entry point, 📖 -> https://webpack.js.org/configuration/entry-context/
   entry: {
     "main": './src/main.ts',
-		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
-		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
-		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
-		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
-    "ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
+		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js'
   },
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
@@ -27,10 +23,16 @@ const config = {
     //libraryTarget: 'commonjs2',
     //devtoolModuleFilenameTemplate: '../[resource-path]'
   },
+  node: {
+    net: 'empty'
+  },
   devtool: 'source-map',
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-    extensions: ['.ts', '.js', '.css']
+    extensions: ['.ts', '.js', '.css'],
+    alias: {
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility')
+    }
   },
   module: {
     rules: [
