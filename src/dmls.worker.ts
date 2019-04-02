@@ -1,21 +1,15 @@
 import langserver from '../bin/dm-langserver.js';
 
 let backlog: MessageEvent[] = [];
-onmessage = (event: MessageEvent) => {
-    console.log("pushing to backlog: ", event.data);
-    backlog.push(event);
-}
+onmessage = (event: MessageEvent) => backlog.push(event);
 
 function realOnMessage(event: MessageEvent) {
-    console.log("handling: ", event.data);
-
     let source = new TextEncoder().encode(event.data);
-    let ptr = Module._malloc(source.byteLength);
-    let target = new Uint8Array(Module.wasmMemory.buffer, ptr, source.byteLength);
+    let len = source.byteLength;
+    let ptr = Module._malloc(len);
+    let target = new Uint8Array(Module.wasmMemory.buffer, ptr, len);
     target.set(source);
-    console.log("before _handle_input(", ptr, ",", source.byteLength, ")");
-    Module._handle_input(ptr, source.byteLength);
-    console.log("after _handle_input");
+    Module._handle_input(ptr, len);
     Module._free(ptr);
 }
 
@@ -32,7 +26,6 @@ interface Module {
 
 let Module: Module = langserver({
     locateFile: (x: string) => "../bin/" + x,
-    setStatus: (x: string) => console.log("status :: ", x),
     postRun: () => {
         for (let message of backlog) {
             realOnMessage(message);

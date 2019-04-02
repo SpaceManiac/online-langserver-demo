@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor';
 import * as lc from 'monaco-languageclient';
+import { createMessageConnection, Event } from 'vscode-jsonrpc';
 
 const LANGUAGE_ID = 'dreammaker';
 const MODEL_URI = 'inmemory://model.dm';
@@ -43,12 +44,28 @@ async function start() {
     lc.MonacoServices.install(editor);
 
     let worker = new Worker("dist/dmls.worker.bundle.js");
-    worker.onmessage = (event: MessageEvent) => {
-        console.log(event.data);
+    let reader: lc.MessageReader = {
+        onError: Event.None,
+        onClose: Event.None,
+        onPartialMessage: Event.None,
+        listen(callback: (data: lc.Message) => void) {
+            worker.onmessage = (event: MessageEvent) => {
+                console.log('<--', event.data);
+                callback(JSON.parse(event.data));
+            }
+        },
+        dispose() {}
     };
-    worker.postMessage("{\"dumb_junk\":2}");
-
-    /*let messageConnection = createMessageConnection(null, null);
+    let writer: lc.MessageWriter = {
+        onError: Event.None,
+        onClose: Event.None,
+        write(msg: lc.Message) {
+            console.log('-->', msg);
+            worker.postMessage(JSON.stringify(msg));
+        },
+        dispose() {}
+    };
+    let messageConnection = createMessageConnection(reader, writer);
 
     let languageClient = new lc.MonacoLanguageClient({
         name: "DreamMaker Language Client",
@@ -61,7 +78,7 @@ async function start() {
             }
         }
     });
-    languageClient.start();*/
+    languageClient.start();
 }
 
 function layout() {
