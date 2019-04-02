@@ -11,7 +11,8 @@ const config = {
   // the entry point, 📖 -> https://webpack.js.org/configuration/entry-context/
   entry: {
     "main": './src/main.ts',
-		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js'
+    "dmls.worker": './src/dmls.worker.ts',
+    "editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
   },
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
@@ -24,7 +25,8 @@ const config = {
     //devtoolModuleFilenameTemplate: '../[resource-path]'
   },
   node: {
-    net: 'empty'
+    net: 'empty',
+    fs: 'empty'
   },
   devtool: 'source-map',
   resolve: {

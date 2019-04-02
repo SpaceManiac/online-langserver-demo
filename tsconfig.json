@@ -4,8 +4,9 @@
 		"target": "es5",
 		"outDir": "out",
 		"lib": [
-			"es5",
-			"dom"
+			"es7",
+			"dom",
+			"webworker"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
@@ -22,6 +23,7 @@
 		".vscode-test"
 	],
 	"include": [
-		"src/**/*.ts"
+		"src/**/*.ts",
+		"bin/dm-langserver.d.ts"
 	]
 }

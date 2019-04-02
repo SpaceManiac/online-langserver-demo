@@ -7,7 +7,7 @@ const MONACO_URI = monaco.Uri.parse(MODEL_URI);
 
 let editor: monaco.editor.IStandaloneCodeEditor;
 
-(window as any).MonacoEnvironment = {
+window.MonacoEnvironment = {
 	getWorkerUrl: function (_moduleId: any, label: string) {
 		if (label === 'json') {
 			return 'dist/json.worker.bundle.js';
@@ -25,7 +25,7 @@ let editor: monaco.editor.IStandaloneCodeEditor;
     }
 };
 
-function start() {
+async function start() {
     monaco.languages.register({
         id: LANGUAGE_ID,
         aliases: ["dreammaker", "dm"],
@@ -41,6 +41,27 @@ function start() {
     window.addEventListener('resize', layout);
 
     lc.MonacoServices.install(editor);
+
+    let worker = new Worker("dist/dmls.worker.bundle.js");
+    worker.onmessage = (event: MessageEvent) => {
+        console.log(event.data);
+    };
+    worker.postMessage("{\"dumb_junk\":2}");
+
+    /*let messageConnection = createMessageConnection(null, null);
+
+    let languageClient = new lc.MonacoLanguageClient({
+        name: "DreamMaker Language Client",
+        clientOptions: {
+            documentSelector: [LANGUAGE_ID],
+        },
+        connectionProvider: {
+            get(errorHandler, closeHandler) {
+                return Promise.resolve(lc.createConnection(messageConnection, errorHandler, closeHandler));
+            }
+        }
+    });
+    languageClient.start();*/
 }
 
 function layout() {
@@ -48,14 +69,6 @@ function layout() {
         width: window.innerWidth,
         height: window.innerHeight - 50,
     });
-}
-
-function getModel(): monaco.editor.IModel {
-    return monaco.editor.getModel(MONACO_URI)!;
-}
-
-function createDocument(model: monaco.editor.IReadOnlyModel) {
-    return lc.TextDocument.create(MODEL_URI, model.getModeId(), model.getVersionId(), model.getValue());
 }
 
 window.addEventListener('load', start);
