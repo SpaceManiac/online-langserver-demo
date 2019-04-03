@@ -1,6 +1,9 @@
 import * as monaco from 'monaco-editor';
 import * as lc from 'monaco-languageclient';
 import { createMessageConnection, Event } from 'vscode-jsonrpc';
+import monkeypatch from './monkeypatch';
+
+monkeypatch();
 
 const LANGUAGE_ID = 'dreammaker';
 
@@ -53,7 +56,7 @@ async function start() {
     let messageConnection = createMessageConnection(reader, writer);
 
     let languageClient = new lc.MonacoLanguageClient({
-        name: "DreamMaker Language Client",
+        name: "DreamMaker Language Server",
         clientOptions: {
             documentSelector: [LANGUAGE_ID],
         },
