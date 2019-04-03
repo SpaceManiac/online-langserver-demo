@@ -3,27 +3,11 @@ import * as lc from 'monaco-languageclient';
 import { createMessageConnection, Event } from 'vscode-jsonrpc';
 
 const LANGUAGE_ID = 'dreammaker';
-const MODEL_URI = 'inmemory://model.dm';
-const MONACO_URI = monaco.Uri.parse(MODEL_URI);
 
 let editor: monaco.editor.IStandaloneCodeEditor;
 
 window.MonacoEnvironment = {
-	getWorkerUrl: function (_moduleId: any, label: string) {
-		if (label === 'json') {
-			return 'dist/json.worker.bundle.js';
-		}
-		if (label === 'css') {
-			return 'dist/css.worker.bundle.js';
-		}
-		if (label === 'html') {
-			return 'dist/html.worker.bundle.js';
-		}
-		if (label === 'typescript' || label === 'javascript') {
-			return 'dist/ts.worker.bundle.js';
-		}
-		return 'dist/editor.worker.bundle.js';
-    }
+	getWorkerUrl: () => "dist/editor.worker.bundle.js",
 };
 
 async function start() {
@@ -50,8 +34,9 @@ async function start() {
         onPartialMessage: Event.None,
         listen(callback: (data: lc.Message) => void) {
             worker.onmessage = (event: MessageEvent) => {
-                console.log('<--', event.data);
-                callback(JSON.parse(event.data));
+                let json = JSON.parse(event.data);
+                console.log("<--", json);
+                callback(json);
             }
         },
         dispose() {}
@@ -60,7 +45,7 @@ async function start() {
         onError: Event.None,
         onClose: Event.None,
         write(msg: lc.Message) {
-            console.log('-->', msg);
+            console.log("-->", msg);
             worker.postMessage(JSON.stringify(msg));
         },
         dispose() {}

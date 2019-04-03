@@ -1,4 +1,4 @@
-import langserver from '../bin/dm-langserver.js';
+import langserver from '../bin/dm_langserver.js';
 
 let backlog: MessageEvent[] = [];
 onmessage = (event: MessageEvent) => backlog.push(event);
