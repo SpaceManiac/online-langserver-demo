@@ -2,6 +2,7 @@ import * as monaco from 'monaco-editor';
 import * as lc from 'monaco-languageclient';
 import { createMessageConnection, Event } from 'vscode-jsonrpc';
 import monkeypatch from './monkeypatch';
+import * as syntax from './syntax';
 
 monkeypatch();
 
@@ -19,6 +20,8 @@ async function start() {
         aliases: ["dreammaker", "dm"],
         extensions: [".dm", ".dme", ".dmm"],
     });
+    monaco.languages.setLanguageConfiguration(LANGUAGE_ID, syntax.languageConfig);
+    monaco.languages.setMonarchTokensProvider(LANGUAGE_ID, syntax.monarch);
 
     editor = monaco.editor.create(document.getElementById("editor-container")!, {
         value: "meme",
