@@ -22,6 +22,7 @@
 	],
 	"main": "./dist/main",
 	"scripts": {
+		"compile-prod": "webpack --mode production",
 		"compile": "webpack --mode none",
 		"watch": "webpack --mode none --watch",
 		"test-compile": "tsc -p ./"
@@ -34,6 +35,7 @@
 		"@types/node": "^7.10.3",
 		"@types/webpack": "^4.4.25",
 		"css-loader": "^2.1.1",
+		"raw-loader": "^2.0.0",
 		"style-loader": "^0.23.1",
 		"ts-loader": "^5.3.3",
 		"tslint": "^5.12.1",

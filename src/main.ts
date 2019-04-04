@@ -24,7 +24,7 @@ async function start() {
     monaco.languages.setMonarchTokensProvider(LANGUAGE_ID, syntax.monarch);
 
     editor = monaco.editor.create(document.getElementById("editor-container")!, {
-        value: "meme",
+        value: require('./examples/ex1.txt').default,
         language: "dreammaker",
         glyphMargin: true,
     });
