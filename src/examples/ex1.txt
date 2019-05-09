@@ -1,38 +1,56 @@
-/client/verb/Do_Stuff()
-    // Try typing stuff here...
-    // ex: usr.name = english_list(list("thing one", "thing two"))
 
-//Returns a list in plain english as a string
-/proc/english_list(list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-    var/total = input.len
-    if (!total)
-        return "[nothing_text]"
-    else if (total == 1)
-        return "[input[1]]"
-    else if (total == 2)
-        return "[input[1]][and_text][input[2]]"
-    else
-        var/output = ""
-        var/index = 1
-        while (index < total)
-            if (index == total - 1)
-                comma_text = final_comma_text
+/datum/proc/kwargs_me(one, two)
+/datum/bar/kwargs_me(three, four)
 
-            output += "[input[index]][comma_text]"
-            index++
+/proc/bad_1()
+	var/obj/O
+	O.Move()
 
-        return "[output][and_text][input[index]]"
+/proc/bad_2()
+	var/list/L
+	L += new /obj
+	L.Cut()
 
-//Empties the list by setting the length to 0. Hopefully the elements get garbage collected
-/proc/clearlist(list/list)
-    if(istype(list))
-        list.len = 0
-    return
+/proc/bad_3()
+	var/total = 0
+	for(var/obj/O in typesof(/obj))
+		world.log << "[O]"
+		total += 1
+	ASSERT(total > 0)
 
-//Removes any null entries from the list
-//Returns TRUE if the list had nulls, FALSE otherwise
-/proc/listclearnulls(list/L)
-    var/start_len = L.len
-    var/list/N = new(start_len)
-    L -= N
-    return L.len < start_len
+/proc/bad_4()
+	var/datum/D = new
+	D.kwargs_me(1, two=2)
+
+/proc/bad_5()
+	var/datum/D = new
+	D.kwargs_me(1, 2, three=3)
+
+/proc/bad_6()
+	var/datum/D = new
+	D.kwargs_me(1)
+
+/proc/bad_7()
+	var/datum/D = new
+	D.kwargs_me(1, 2, 3)
+
+/proc/bad_8()
+	var/list/obj/O = new /obj
+	// why in the world does this compile?
+	O.Cut()
+	world << "name: [O.name]"
+
+/proc/bad_9()
+	src << "hi"
+
+/proc/bad_10()
+	..()
+
+/proc/bad_11(this/typepath/does/not/exist/X)
+
+/datum/bad_12
+	var/i in 1 to 20
+
+/proc/bad_12()
+	var/datum/bad_12/D = new
+	D.i = 30
